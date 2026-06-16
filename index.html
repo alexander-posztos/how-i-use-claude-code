@@ -823,6 +823,7 @@ For each question, provide your recommended answer.</pre>
     <tr><td><code>/pi-review</code></td><td>global</td><td>Spawns a <em>different vendor's</em> coding agent to review my diff and return a verdict.</td></tr>
     <tr><td><code>playwright-cli</code></td><td>global</td><td>Drives a real browser. Auto-triggers whenever something needs visual verification - my most-invoked skill.</td></tr>
     <tr><td><code>/skill-creator</code></td><td>global</td><td>A skill for writing and eval-testing skills.</td></tr>
+    <tr><td><code>/close-the-loop</code></td><td>global</td><td>Bug-fix loop: reproduce as a failing test, make the smallest fix, confirm it in a real browser, watch the test go green, then graduate it into the suite as a regression guard.</td></tr>
     <tr><td><code>/client-email</code></td><td>project</td><td>Drafts and sends mail from my business address via a CLI mail client, tone rules baked in.</td></tr>
     <tr><td><code>/github-issues</code></td><td>project</td><td>My issue + project-board conventions, so "file that as an issue" lands formatted.</td></tr>
     <tr><td><code>/frontend-design</code></td><td>plugin</td><td>Design-taste injection so UI output doesn't look like default AI design.</td></tr>
@@ -849,6 +850,7 @@ For each question, provide your recommended answer.</pre>
   <li><strong>Lock it in:</strong> add that test to the suite as a regression guard, then run the <em>whole</em> suite to confirm the fix broke nothing else.</li>
   <li><strong>Hand me the manual check</strong> - the click path, the URL, what I should see - so I can confirm it the last way a machine can't.</li>
 </ol>
+<p>I've wrapped this exact loop into a skill - <code>/close-the-loop</code> - so I can trigger the whole sequence by name instead of re-explaining it every time. It lives in my public dotfiles repo (<a href="#s-further">section 12</a>).</p>
 <h3>Git stays mine</h3>
 <p>I don't hand off committing and pushing to the agents, just because I want to understand and review the code myself. This is not really necessary from a technical standpoint - you can definitely let the agent take over. I just like to really understand how the agent implements stuff. Also, sometimes I catch the agent implementing stuff way too complicated and notice that my prompt wasn't specific enough - so that's also a benefit of handling the git stuff yourself.</p>
 </section>
@@ -864,7 +866,7 @@ For each question, provide your recommended answer.</pre>
 
 <section id="s-further">
 <h2>12. Further Work</h2>
-<p>My custom skills (<code>grill-me</code>, <code>handoff</code>, <code>to-prd</code>, <code>pi-review</code>) live in my public dotfiles repo: <a href="https://github.com/alexander-posztos/dotfiles">github.com/alexander-posztos/dotfiles</a>. The setup itself is never finished - what I want to change next:</p>
+<p>My custom skills (<code>grill-me</code>, <code>handoff</code>, <code>to-prd</code>, <code>close-the-loop</code>, <code>pi-review</code>) live in my public dotfiles repo: <a href="https://github.com/alexander-posztos/dotfiles">github.com/alexander-posztos/dotfiles</a>. The setup itself is never finished - what I want to change next:</p>
 <ul>
   <li><strong>Replace <code>grill-me</code> with <code>grill-with-docs</code></strong> (<a href="https://www.aihero.dev/grill-with-docs">Matt Pocock</a>). Same relentless interview, but it first reads a <code>CONTEXT.md</code> glossary and the repo's decision records, challenges fuzzy terminology against them, and writes resolved decisions back into the docs - so every grilling session leaves standing context behind for all later sessions. Needs a one-time <code>CONTEXT.md</code> per repo; <code>grill-me</code> stays for projects without a codebase.</li>
   <li><strong>Move the hard rules from CLAUDE.md into <a href="https://code.claude.com/docs/en/hooks-guide">hooks</a></strong> - scripts that run deterministically on agent events, like before every tool call. A PreToolUse hook can block writes to my prod database even in yolo mode, and a PostToolUse check can reject an em-dash the moment it's written. CLAUDE.md rules are followed most of the time; hooks fire every time.</li>

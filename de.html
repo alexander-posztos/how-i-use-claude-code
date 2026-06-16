@@ -823,6 +823,7 @@ For each question, provide your recommended answer.</pre>
     <tr><td><code>/pi-review</code></td><td>global</td><td>Startet den Coding-Agenten <em>eines anderen Anbieters</em>, der meinen Diff reviewt und ein Urteil liefert.</td></tr>
     <tr><td><code>playwright-cli</code></td><td>global</td><td>Steuert einen echten Browser. Triggert automatisch, wenn etwas visuell verifiziert werden muss - mein meistaufgerufener Skill.</td></tr>
     <tr><td><code>/skill-creator</code></td><td>global</td><td>Ein Skill zum Schreiben und Eval-Testen von Skills.</td></tr>
+    <tr><td><code>/close-the-loop</code></td><td>global</td><td>Bug-Fix-Loop: als fehlschlagenden Test reproduzieren, den kleinsten Fix machen, im echten Browser bestätigen, zusehen wie der Test grün wird, dann als Regressionsschutz in die Suite aufnehmen.</td></tr>
     <tr><td><code>/client-email</code></td><td>Projekt</td><td>Entwirft und verschickt Mails von meiner Firmenadresse über einen CLI-Mail-Client, Tonregeln eingebaut.</td></tr>
     <tr><td><code>/github-issues</code></td><td>Projekt</td><td>Meine Issue- und Projektboard-Konventionen, damit "leg das als Issue an" formatiert landet.</td></tr>
     <tr><td><code>/frontend-design</code></td><td>Plugin</td><td>Injiziert Design-Geschmack, damit UI-Output nicht nach Standard-KI-Design aussieht.</td></tr>
@@ -849,6 +850,7 @@ For each question, provide your recommended answer.</pre>
   <li><strong>Absichern:</strong> den Test als Regressionsschutz in die Suite aufnehmen, dann die <em>ganze</em> Suite laufen lassen, um zu bestätigen, dass der Fix nichts anderes kaputt gemacht hat.</li>
   <li><strong>Mir den manuellen Check geben</strong> - der Klickpfad, die URL, was ich sehen sollte - damit ich es auf die letzte Art bestätigen kann, die eine Maschine nicht kann.</li>
 </ol>
+<p>Genau diesen Loop habe ich in einen Skill gepackt - <code>/close-the-loop</code> - damit ich die ganze Abfolge per Namen auslösen kann, statt sie jedes Mal neu zu erklären. Er liegt in meinem öffentlichen Dotfiles-Repo (<a href="#s-further">Abschnitt 12</a>).</p>
 <h3>Git bleibt bei mir</h3>
 <p>Committen und Pushen gebe ich nicht an die Agenten ab, einfach weil ich den Code selbst verstehen und reviewen will. Technisch nötig ist das nicht wirklich - du kannst das durchaus den Agenten überlassen. Ich will einfach wirklich verstehen, wie der Agent Sachen umsetzt. Außerdem erwische ich den Agenten manchmal dabei, wie er etwas viel zu kompliziert implementiert, und merke, dass mein Prompt nicht präzise genug war - auch das ist ein Vorteil davon, das Git-Zeug selbst zu machen.</p>
 </section>
@@ -864,7 +866,7 @@ For each question, provide your recommended answer.</pre>
 
 <section id="s-further">
 <h2>12. Ausblick</h2>
-<p>Meine eigenen Skills (<code>grill-me</code>, <code>handoff</code>, <code>to-prd</code>, <code>pi-review</code>) liegen in meinem öffentlichen Dotfiles-Repo: <a href="https://github.com/alexander-posztos/dotfiles">github.com/alexander-posztos/dotfiles</a>. Das Setup selbst ist nie fertig - was ich als Nächstes ändern will:</p>
+<p>Meine eigenen Skills (<code>grill-me</code>, <code>handoff</code>, <code>to-prd</code>, <code>close-the-loop</code>, <code>pi-review</code>) liegen in meinem öffentlichen Dotfiles-Repo: <a href="https://github.com/alexander-posztos/dotfiles">github.com/alexander-posztos/dotfiles</a>. Das Setup selbst ist nie fertig - was ich als Nächstes ändern will:</p>
 <ul>
   <li><strong><code>grill-me</code> durch <code>grill-with-docs</code> ersetzen</strong> (<a href="https://www.aihero.dev/grill-with-docs">Matt Pocock</a>). Dasselbe unerbittliche Interview, aber es liest zuerst ein <code>CONTEXT.md</code>-Glossar und die Decision Records des Repos, hinterfragt schwammige Begriffe und schreibt geklärte Entscheidungen zurück in die Docs - so hinterlässt jede Grill-Session bleibenden Kontext für alle späteren Sessions. Braucht einmalig eine <code>CONTEXT.md</code> pro Repo; <code>grill-me</code> bleibt für Projekte ohne Codebase.</li>
   <li><strong>Die harten Regeln aus der CLAUDE.md in <a href="https://code.claude.com/docs/en/hooks-guide">Hooks</a> verlagern</strong> - Skripte, die deterministisch auf Agent-Events laufen, etwa vor jedem Tool-Call. Ein PreToolUse-Hook kann Schreibzugriffe auf meine Prod-Datenbank sogar im Yolo-Modus blockieren, und ein PostToolUse-Check kann einen Em-Dash in dem Moment zurückweisen, in dem er geschrieben wird. CLAUDE.md-Regeln werden meistens befolgt; Hooks feuern jedes Mal.</li>
